@@ -3,7 +3,7 @@
 import argparse
 from traceback import print_tb
 # TorCrawl Modules
-from modules.crawler import crawler
+from modules.crawler import *
 from modules.checker import *
 
 help = '''
@@ -43,8 +43,6 @@ def main():
 	checktor()
 
 	# Perbaikan link, pembuatan outpath dan pemanggilan proses crawling
-	global website
-	global outpath
 	crawl()
 	print("\n\n** Proses Crawling Selesai **\n")
 
