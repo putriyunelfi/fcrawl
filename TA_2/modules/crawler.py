@@ -188,7 +188,7 @@ class Crawler:
             # will use it to compute promise of its child links
 
             # add the crawled URL and details into the dictionary parsed_urls
-            self.parsed_urls.add_item(url, links, item[0], relevance, len(html_text), requests.get(url).status_code,
+            self.parsed_urls.add_item(url, links, item[0], relevance, len(html_text), requests.get(url, proxies=proxies).status_code,
                                       str(datetime.datetime.now().time()))
             print('Parsed: ', item)
             print('Relevance: ' + str(relevance) + '\n')
@@ -265,7 +265,7 @@ def validate_link(url):
 
     # checking if the url returns a status code 200
     try:
-        r = requests.get(url)
+        r = requests.get(url.proxies=proxies)
         if r.status_code == 200:
             pass  # website returns status code 200, so check for robots.txt
         else:
@@ -316,7 +316,7 @@ def get_input():
     print('\nObtaining start pages...\n')
     # checking if values are input correctly, otherwise use defaults
     if len(query) == 0:
-        query = 'drugs'
+        query = 'web'
 
     if len(num_start_pages) == 0 or int(num_start_pages) <= 0:
         num_start_pages = 10
@@ -587,7 +587,7 @@ def visit_url(url, page_link_limit):
     """ parses a page to extract text and first k links; returns HTML text and normalized links """
 
     try:
-        res = requests.get(url)
+        res = requests.get(url,proxies=proxies)
         if res.status_code == 200 and 'text/html' in res.headers['Content-Type']:  # also checking MIME type
             html_text = res.text
             soup = BeautifulSoup(res.content, 'lxml')
@@ -681,7 +681,7 @@ def create_log(parsed_urls, query, num_start_pages, num_crawled, page_link_limit
         counter += 1
 
 
-def main():
+def crawl():
     query, num_start_pages, n, page_link_limit, mode, relevance_threshold = get_input()
     start_time = time.time()
     start_pages = get_start_pages(query, num_start_pages)
@@ -721,4 +721,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    m=crawl()
